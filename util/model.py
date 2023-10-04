@@ -9,6 +9,10 @@ from keras.optimizers import Adam, Adadelta
 
 import numpy as np
 import os
+
+classifier_activation = "softmax"
+classifier_loss = "categorical_crossentropy"
+
 def custom_loss(layer, lay2, T):
     def loss(y_true,y_pred):
         from keras.losses import categorical_crossentropy as logloss
@@ -103,13 +107,13 @@ class model(object):
         model_type=(0,''),      # Model Type, 0 for TCN, 1 for LSTM, 2 for TCN+LSTM
         lr=1e-3,                # Learning Rate
         num_frame=60,           # Number of frames
-        feature_size=(6,)):    # Feature dimensions
+        feature_size=(1,)):    # Feature dimensions
 
         self.model = None
         self.model_type = model_type
         self.num_frame = num_frame
         self.optimizer = Adam(lr=lr)
-#        self.optimizer = Adadelta(lr=lr)
+#        self.optimizer = Adadelta
 
         if model_type[0] == "TCN": #TCN
             self.create_model_0(num_frame, num_classes, feature_size)
@@ -134,39 +138,39 @@ class model(object):
         t = BatchNormalization(axis=-1)(t4)
         t = GlobalAveragePooling1D()(t)
 
-        t = Dense(20)(t)
-        tout = Dense(num_classes,activation="sigmoid")(t)
+#        t = Dense(20)(t)
+        tout = Dense(num_classes,activation=classifier_activation)(t)
 
         self.model = Model(inputs=main_input, output=[tout])
         self.model.summary()
 
-        self.model.compile(loss='mse', optimizer=self.optimizer, metrics=[])
+        self.model.compile(loss=classifier_loss, optimizer=self.optimizer, metrics=["accuracy"])
 
 
     def create_model_1(self, num_frame, num_classes, feature_size,activation_custom="relu"):
         main_input = Input(shape=(num_frame, feature_size[0]))
-        t = lstm_block((num_frame, feature_size[0]), (60,30) , main_input)
+        t = lstm_block((num_frame, feature_size[0]), (128,128) , main_input)
         t = BatchNormalization(axis=-1)(t)
-        t = Dense(20)(t)
-        tout = Dense(num_classes,activation="sigmoid")(t)
+#        t = Dense(100)(t)
+        tout = Dense(num_classes,activation=classifier_activation)(t)
 
         self.model = Model(inputs=main_input, output=[tout])
         self.model.summary()
 
-        self.model.compile(loss='mse', optimizer=self.optimizer, metrics=[])
+        self.model.compile(loss=classifier_loss, optimizer=self.optimizer, metrics=["accuracy"])
 
 
     def create_model_2(self, num_frame, num_classes, feature_size,activation_custom="relu"):
         main_input = Input(shape=(num_frame, feature_size[0]))
-        t = bilstm_block((num_frame, feature_size[0]), (60,30) , main_input)
+        t = bilstm_block((num_frame, feature_size[0]), (128,128) , main_input)
         t = BatchNormalization(axis=-1)(t)
-        t = Dense(20)(t)
-        tout = Dense(num_classes,activation="sigmoid")(t)
+#        t = Dense(20)(t)
+        tout = Dense(num_classes,activation=classifier_activation)(t)
 
         self.model = Model(inputs=main_input, output=[tout])
         self.model.summary()
 
-        self.model.compile(loss='mse', optimizer=self.optimizer, metrics=[])
+        self.model.compile(loss=classifier_loss, optimizer=self.optimizer, metrics=["accuracy"])
 #
 #    def create_model_2(self, num_frame, num_classes, feature_size,activation_custom="relu"):
 #        main_input = Input(shape=(num_frame, feature_size[0]))
@@ -204,11 +208,11 @@ class model(object):
               path=''
               ):
 
-#        train_label = to_categorical(train_label, num_classes=None)
-#        val_label = to_categorical(val_label, num_classes=None)
-
         os.makedirs(f'{path}//{self.model_type[0]}//', exist_ok=True)
 
+        train_label =  to_categorical(train_label, num_classes=None)
+        val_label =  to_categorical(val_label, num_classes=None)
+    
         filepath = f'{path}//{self.model_type[0]}//{self.model_type[1]}.hdf5'
         checkpoint = ModelCheckpoint(filepath, monitor='val_loss',
                                      verbose=0, save_best_only=True, save_weights_only=True,

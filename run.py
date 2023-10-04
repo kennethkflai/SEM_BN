@@ -1,97 +1,60 @@
 from util.model import model
-from util.data_process_real import Data_Model
+from util.data_process import Data_Model
 import numpy as np
 from keras import backend as K
 import argparse
+from sklearn.metrics import classification_report
 
-save_root = "save_noSG"
+save_root = "save"
 
 models = {0:"TCN", 1:"LSTM", 2:"BiLSTM"}
-categories = {0:"Worker", 1:"Business", 2:"Economic", 3:"Sponsor", 4:"Refugee", 5:"Total"}
+categories = {0:"HR", 1:"RR", 2:"GSR", 3:"Temp"}
 
-
-def error_mse(prediction, truth):
-    difference = prediction-truth
-    squared = difference **2
-    return np.sum(squared)/len(squared)
-
-def error_r2(prediction, truth):
-    from sklearn.metrics import r2_score
-    return r2_score(truth,prediction)
-
-def error_rmsle(prediction, truth):
-    p = np.log(prediction+1)
-    t = np.log(truth+1)
-    difference = (p-t)
-    squared = difference**2
-
-    return np.sqrt(np.sum(squared)/len(squared))
-
-def calculate_performance(model_type, model_name, data_set, prediction, truth):
-    np.save(f'{save_root}//{model_type}//{model_name}_predict_{data_set}', prediction)
-    np.save(f'{save_root}//{model_type}//{model_name}_truth_{data_set}', truth)
-
-
-    mse = error_mse(prediction,truth)
-    r2 = error_r2(prediction,truth)
-    rmsle = error_rmsle(prediction,truth)
-    print(f"{data_set} t: {model_type}, n: {model_name}, mse: {mse}, rmsle: {rmsle:>10}, rmsle: {r2:2.20f}")
-
-    f = open(f'{save_root}//acc.txt', 'a')
-    f.write(f"{data_set:>10} t: {model_type:>10}, n: {model_name:>10}, mse: {mse:2.20f}, rmsle: {rmsle:2.20f}, r2: {r2:2.20f}\n")
-    f.close()
 
 if __name__ == "__main__":
     _argparser = argparse.ArgumentParser(
             description='Recognition',
             formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     _argparser.add_argument(
-        '--timestep', type=int, default=60, metavar='INTEGER',
+        '--timestep', type=int, default=11, metavar='INTEGER',
         help='Time step in network')
-    _argparser.add_argument(
-        '--type', type=int, default=1, metavar='INTEGER',
-        help='model')
     _argparser.add_argument(
         '--sensor', type=int, default=0, metavar='INTEGER',
         help='model')
     _args = _argparser.parse_args()
 
-    model_type = _args.type
-    batch_size = 16
+    batch_size = 256
     num_frame = _args.timestep
-    root_path = r"data_csv//*"
+    root_path = r"data_csv//*//*"
+
 
     data_structure = Data_Model(root_path, num_frame=num_frame, skip=np.int(1), sensor=-1)
-    total_data, total_label = data_structure.get_data()
+    subject_train_data, subject_train_label, subject_test_data, subject_test_label = data_structure.get_data()
 
-    for sensor in range(0, 6):
+    train_label = subject_train_label[0]
+    train_data_total = subject_train_data[0]
+    for i in range(1,len(subject_train_label)):
+        train_label = train_label + subject_train_label[i]
+        train_data_total = train_data_total + subject_train_data[i]
+        
+    test_label = subject_test_label[0]
+    test_data_total = subject_test_data[0]
+    for i in range(1,len(subject_test_label)):
+        test_label = test_label + subject_test_label[i]
+        test_data_total = test_data_total + subject_test_data[i]
+          
 
-        data = total_data[:,:,:,[sensor]]
-        label = total_label[:,:,[sensor]]
-
-        train_data = data[0][:20]
-        train_label = label[0][:20]
-
-        val_data = data[0][20:30]
-        val_label = label[0][20:30]
-
-        test_data = data[0][30:]
-        test_label = label[0][30:]
-
-        for index in range(1,len(label)):
-            train_data = np.vstack((train_data,data[index][:20]))
-            train_label = np.vstack((train_label,label[index][:20]))
-
-            val_data = np.vstack((val_data,data[index][20:30]))
-            val_label = np.vstack((val_label,label[index][20:30]))
-
-            test_data = np.vstack((test_data,data[index][30:]))
-            test_label = np.vstack((test_label,label[index][30:]))
-
+    for sensor in range(0, 4):
+        test_data = np.array(test_data_total)[:,:,sensor]
+        test_data = test_data[:,:,np.newaxis]
+        train_data = np.array(train_data_total)[:,:,sensor]
+#        train_data = np.random.random((54642,11))
+        train_data = train_data[:,:,np.newaxis]
+        
         for model_type in range(0,3):
             model_name = categories[sensor]
 
-            t_model = model(num_classes=1,
+            t_model = model(num_classes=len(np.unique(train_label)),
                             model_type=(models[model_type],model_name),
                             lr=1e-3,
                             num_frame=num_frame,
@@ -99,18 +62,26 @@ if __name__ == "__main__":
 
             save_file = t_model.train(train_data,
                                       train_label,
-                                      val_data,
-                                      val_label,
+                                      test_data,
+                                      test_label,
                                       batch_size,
                                       base_epoch=9999,
                                       path=save_root)
 
             t_model.load(save_file)
             pred_test_label = t_model.predict(np.array(test_data))
-            pred_val_label = t_model.predict(np.array(val_data))
-
-            calculate_performance(models[model_type], model_name, "test", pred_test_label,test_label)
-            calculate_performance(models[model_type], model_name, "val", pred_val_label,val_label)
-
+            prediction = np.argmax(pred_test_label,1)
+# t_model.predict(np.ones((1,11,1)))
+            np.save(f'{save_root}//{models[model_type]}//{model_name}_predict_test', prediction)
+            np.save(f'{save_root}//{models[model_type]}//{model_name}_truth_test', test_label)
+        
+        
+            report = classification_report(test_label, prediction,output_dict=True)
+            f = open(f'{save_root}//acc.txt', 'a')
+                        
+            f.write(f'''TS: {num_frame:3.0f}, model: {models[model_type]:5s}, sensor: {model_name}, classes: {len(np.unique(train_label))}, BatchSize: {batch_size:3d}, Accuracy: {report['accuracy']:.8f}, f1: {report['macro avg']['f1-score']:.8f}, precision: {report['macro avg']['precision']:.8f}, recall: {report['macro avg']['recall']:.8f} \n''')
+            
+            f.close()
+            
             del t_model
             K.clear_session()
