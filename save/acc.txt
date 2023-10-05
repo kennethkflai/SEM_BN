@@ -1,0 +1,5 @@
+TS:   8, skip: 1, model: TCN  , sensor: All_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.47363650, f1: 0.44127372, precision: 0.54051450, recall: 0.52458630 
+TS:   8, skip: 1, model: LSTM , sensor: All_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57773078, f1: 0.36617830, precision: 0.28917120, recall: 0.49908640 
+TS:   8, skip: 1, model: BiLSTM, sensor: All_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.56443572, f1: 0.45345401, precision: 0.51307371, recall: 0.50599220 
+TS:   8, skip: 1, model: TCN  , sensor: HR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57480989, f1: 0.41357782, precision: 0.52234023, recall: 0.50471703 
+TS:   8, skip: 1, model: LSTM , sensor: HR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.55496802, f1: 0.49576647, precision: 0.51855777, recall: 0.51373052 

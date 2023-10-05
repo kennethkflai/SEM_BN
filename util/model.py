@@ -61,6 +61,25 @@ def cudnnlstm_block(size, units, inp):
     t = CuDNNLSTM(units[1], return_sequences=False)(t)
     return t
 
+def MLP(fc_units, t):
+    """
+    Network sub-block for multi-layer perceptron
+    """
+    activation_custom = 'relu'
+    t = Dense(2*fc_units)(t)
+    t = BatchNormalization(axis=-1)(t)
+    t = Activation(activation_custom)(t)
+    t = Dropout(0.5)(t)
+    t = Dense(fc_units)(t)
+    t = BatchNormalization(axis=-1)(t)
+    t = Activation(activation_custom)(t)
+    t = Dropout(0.5)(t)
+    t = Dense(2*fc_units)(t)
+    t = BatchNormalization(axis=-1)(t)
+    t = Activation(activation_custom)(t)
+    t = Dropout(0.5)(t)
+    return t
+
 def TCN_Block(inp, activation_custom, vals, jump=True, length=8):
     """
     TCN Network
@@ -113,7 +132,7 @@ class model(object):
         self.model_type = model_type
         self.num_frame = num_frame
         self.optimizer = Adam(lr=lr)
-#        self.optimizer = Adadelta
+#        self.optimizer = "adadelta"
 
         if model_type[0] == "TCN": #TCN
             self.create_model_0(num_frame, num_classes, feature_size)
@@ -138,7 +157,7 @@ class model(object):
         t = BatchNormalization(axis=-1)(t4)
         t = GlobalAveragePooling1D()(t)
 
-#        t = Dense(20)(t)
+        t = MLP(256, t)
         tout = Dense(num_classes,activation=classifier_activation)(t)
 
         self.model = Model(inputs=main_input, output=[tout])
@@ -151,7 +170,7 @@ class model(object):
         main_input = Input(shape=(num_frame, feature_size[0]))
         t = lstm_block((num_frame, feature_size[0]), (128,128) , main_input)
         t = BatchNormalization(axis=-1)(t)
-#        t = Dense(100)(t)
+        t = MLP(256, t)
         tout = Dense(num_classes,activation=classifier_activation)(t)
 
         self.model = Model(inputs=main_input, output=[tout])
@@ -164,7 +183,7 @@ class model(object):
         main_input = Input(shape=(num_frame, feature_size[0]))
         t = bilstm_block((num_frame, feature_size[0]), (128,128) , main_input)
         t = BatchNormalization(axis=-1)(t)
-#        t = Dense(20)(t)
+        t = MLP(256, t)
         tout = Dense(num_classes,activation=classifier_activation)(t)
 
         self.model = Model(inputs=main_input, output=[tout])
@@ -210,6 +229,10 @@ class model(object):
 
         os.makedirs(f'{path}//{self.model_type[0]}//', exist_ok=True)
 
+        cw = {i: 1/((train_label.count(i)/len(train_label)))
+              for i in range(len(np.unique(train_label)))}
+
+            
         train_label =  to_categorical(train_label, num_classes=None)
         val_label =  to_categorical(val_label, num_classes=None)
     
@@ -225,7 +248,7 @@ class model(object):
 
         self.model.fit(train_data, train_label, batch_size=bs,
                        epochs=base_epoch, shuffle=True,
-                       validation_data=(val_data, val_label),
+                       validation_data=(val_data, val_label),class_weight=cw,
                        verbose=1, callbacks=callbacks_list,
                        )
 
