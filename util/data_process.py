@@ -6,6 +6,9 @@ from tqdm import tqdm
 from scipy.signal import savgol_filter
 
 def max_min_scaler(data):
+    '''
+    Rescale data to [0,1] using the min and max value
+    '''
     mx = np.max(data)
     mn = np.min(data)
 
@@ -14,31 +17,50 @@ def max_min_scaler(data):
     else:
         scaled = (data-mn)/(mx-mn)
 
-#    print(len(data))
     return scaled
 
-def normalize_data(data,use_sg_filter=True):
-
-    # natural logarithm
-    # apply sg filter
-    # apply max min scaler
-
-#    data = np.log(data)
-
-    normalized_data = []
+def standardize(data):
+    '''
+    Standardize data such that the mean of data is 0 and standard deviation is 1
+    '''
+    average = np.mean(data)
+    deviation = np.std(data)
+    
+    standard = (data-average)/deviation
+    
+    return standard
+    
+def preprocess_data(data,
+                    use_sg_filter=True,
+                    use_scaling=True,
+                    use_standard=True):
+    '''
+    Preprocess data by:
+        1) smoothing via savgol filter
+        2) scaling data to [0,1]
+        3) standardize data so mean=0, std=1
+    '''
+    processed_data = []
     for column in range(len(data[0])):
         temp_data = data[:,column]
 
         if use_sg_filter == True:
             temp_data = savgol_filter(temp_data,25,3) #parameters 25, 3, nearest
+            
+        if use_scaling == True:
+            temp_data = max_min_scaler(temp_data)
+            
+        if use_standard == True:
+            temp_data = standardize(temp_data)
+            
+        processed_data.append(temp_data)
 
-        temp_data = max_min_scaler(temp_data)
-        normalized_data.append(temp_data)
-
-    return np.swapaxes(np.array(normalized_data),0,1)
+    return np.swapaxes(np.array(processed_data),0,1)
 
 def segments(data, labels):
-    
+    '''
+    Separate data into individual task segments.  Each data file contains ~41 tasks where the last 30 second is of interest
+    '''
     temp_data = []
     label = []
     
@@ -56,17 +78,9 @@ def segments(data, labels):
     return temp_data, label
     
 def extract_time(data, labels, num_frame, skip, sensor):
-
-#    if sensor == -1:
-#        temp_data = data
-#    else:
-#        temp_data = data[:,sensor]
-#
-#    data = [temp_data[i:i+num_frame] for i in range(0,len(temp_data)-num_frame,skip)]
-#    label = [labels[i+num_frame] for i in range(0,len(labels)-num_frame,skip)]
-#
-#
-#    return data, label
+    '''
+    For each task, use sliding window to extract time frame based on window size and skip
+    '''
 
     if sensor == -1:
         temp_data = data
@@ -107,28 +121,6 @@ class Data_Model(object):
         self.test_label = []
         self.test_data = []
         
-#        for index in tqdm(range(len(file_list))):
-#            df = pd.read_csv(file_list[index])
-#        
-#            data = df.iloc[:,4:]
-#            data = np.array(data)
-#            
-#            if np.isnan(data).any():
-#                nan_index = np.argwhere(np.isnan(data))
-#                for nindex in range(len(nan_index)):
-#                    data = np.delete(data,[nan_index[len(nan_index)-1-nindex][0]],0)
-#                
-#            general_data = normalize_data(data,use_sg_filter=False)
-#            data, label = extract_time(general_data, num_frame, skip, sensor)
-#        
-#            if "train" in file_list[index]:
-#                self.train_data.append(data)
-#                self.train_label.append(label)
-#                
-#            else:
-#                self.test_data.append(data)
-#                self.test_label.append(label)
-                
         for index in tqdm(range(len(file_list))):
             df = pd.read_csv(file_list[index])
         
@@ -142,7 +134,7 @@ class Data_Model(object):
                     data = np.delete(data,[nan_index[len(nan_index)-1-nindex][0]],0)
                     labels = np.delete(labels,[nan_index[len(nan_index)-1-nindex][0]],0)
                     
-            general_data = normalize_data(data,use_sg_filter=True)
+            general_data = preprocess_data(data,use_sg_filter=True)
             data, label = extract_time(general_data, labels, num_frame, skip, sensor)
             
         

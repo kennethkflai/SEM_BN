@@ -1,5 +1,8 @@
-TS:   8, skip: 1, model: TCN  , sensor: All_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.47363650, f1: 0.44127372, precision: 0.54051450, recall: 0.52458630 
-TS:   8, skip: 1, model: LSTM , sensor: All_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57773078, f1: 0.36617830, precision: 0.28917120, recall: 0.49908640 
-TS:   8, skip: 1, model: BiLSTM, sensor: All_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.56443572, f1: 0.45345401, precision: 0.51307371, recall: 0.50599220 
-TS:   8, skip: 1, model: TCN  , sensor: HR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57480989, f1: 0.41357782, precision: 0.52234023, recall: 0.50471703 
-TS:   8, skip: 1, model: LSTM , sensor: HR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.55496802, f1: 0.49576647, precision: 0.51855777, recall: 0.51373052 
+TS:  30, skip: 1, cv: 0, model: TCN  , sensor: Temp, classes: 2, BatchSize:  32, Val Accuracy: 0.53781513, Accuracy: 0.50746269, f1: 0.50348080, precision: 0.50505561, recall: 0.50495638 
+TS:  30, skip: 1, cv: 0, model: TCN  , sensor: GSR, classes: 2, BatchSize:  32, Val Accuracy: 0.60504202, Accuracy: 0.64676617, f1: 0.64645113, precision: 0.64642362, recall: 0.64651071 
+TS:  30, skip: 1, cv: 0, model: TCN  , sensor: RR, classes: 2, BatchSize:  32, Val Accuracy: 0.51680672, Accuracy: 0.50248756, f1: 0.43602694, precision: 0.53137903, recall: 0.51506741 
+TS:  30, skip: 1, cv: 0, model: TCN  , sensor: HR, classes: 2, BatchSize:  32, Val Accuracy: 0.55462185, Accuracy: 0.51741294, f1: 0.42105888, precision: 0.50977654, recall: 0.50381642 
+TS:  30, skip: 1, cv: 0, model: TCN  , sensor: All, classes: 2, BatchSize:  32, Val Accuracy: 0.64705882, Accuracy: 0.59701493, f1: 0.59697502, precision: 0.59826216, recall: 0.59808684 
+TS:  30, skip: 1, cv: 0, model: LSTM , sensor: Temp, classes: 2, BatchSize:  32, Val Accuracy: 0.53781513, Accuracy: 0.54228856, f1: 0.44819766, precision: 0.57619048, recall: 0.52854877 
+TS:  30, skip: 1, cv: 0, model: BiLSTM, sensor: Temp, classes: 2, BatchSize:  32, Val Accuracy: 0.54201681, Accuracy: 0.52736318, f1: 0.52717593, precision: 0.52882318, recall: 0.52869746 
+TS:  30, skip: 1, cv: 0, model: TCN+LSTM, sensor: Temp, classes: 2, BatchSize:  32, Val Accuracy: 0.51260504, Accuracy: 0.51243781, f1: 0.49336420, precision: 0.50718326, recall: 0.50629461 

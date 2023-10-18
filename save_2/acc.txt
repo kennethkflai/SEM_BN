@@ -1,0 +1,80 @@
+TS:   8, skip: 1, model: TCN  , sensor: All_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.47363650, f1: 0.44127372, precision: 0.54051450, recall: 0.52458630 
+TS:   8, skip: 1, model: LSTM , sensor: All_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57773078, f1: 0.36617830, precision: 0.28917120, recall: 0.49908640 
+TS:   8, skip: 1, model: BiLSTM, sensor: All_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.56443572, f1: 0.45345401, precision: 0.51307371, recall: 0.50599220 
+TS:   8, skip: 1, model: TCN  , sensor: HR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57480989, f1: 0.41357782, precision: 0.52234023, recall: 0.50471703 
+TS:   8, skip: 1, model: LSTM , sensor: HR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.55496802, f1: 0.49576647, precision: 0.51855777, recall: 0.51373052 
+TS:   8, skip: 1, model: BiLSTM, sensor: HR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.55229894, f1: 0.50287647, precision: 0.51936193, recall: 0.51541221 
+TS:   8, skip: 1, model: TCN  , sensor: RR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.56685300, f1: 0.55699587, precision: 0.55689016, recall: 0.55718291 
+TS:   8, skip: 1, model: LSTM , sensor: RR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57878834, f1: 0.36660287, precision: 0.28939417, recall: 0.50000000 
+TS:   8, skip: 1, model: BiLSTM, sensor: RR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.54952913, f1: 0.54325121, precision: 0.59502410, recall: 0.58246602 
+TS:   8, skip: 1, model: TCN  , sensor: GSR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.55929899, f1: 0.51274193, precision: 0.52920212, recall: 0.52359143 
+TS:   8, skip: 1, model: LSTM , sensor: GSR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.54721257, f1: 0.49588737, precision: 0.51215544, recall: 0.50958601 
+TS:   8, skip: 1, model: BiLSTM, sensor: GSR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.56206879, f1: 0.49710327, precision: 0.52605581, recall: 0.51830226 
+TS:   8, skip: 1, model: TCN  , sensor: Temp_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.51140656, f1: 0.51024510, precision: 0.53368539, recall: 0.53229742 
+TS:   8, skip: 1, model: LSTM , sensor: Temp_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57878834, f1: 0.36660287, precision: 0.28939417, recall: 0.50000000 
+TS:   8, skip: 1, model: BiLSTM, sensor: Temp_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57878834, f1: 0.36660287, precision: 0.28939417, recall: 0.50000000 
+TS:  16, skip: 1, model: TCN  , sensor: All_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.52910837, f1: 0.52659097, precision: 0.53117309, recall: 0.53208141 
+TS:  16, skip: 1, model: LSTM , sensor: All_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.58172840, f1: 0.38009980, precision: 0.48704968, recall: 0.49922998 
+TS:  16, skip: 1, model: BiLSTM, sensor: All_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57591221, f1: 0.56242195, precision: 0.56256861, recall: 0.56231287 
+TS:  16, skip: 1, model: TCN  , sensor: HR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.58101509, f1: 0.40867121, precision: 0.52155734, recall: 0.50382421 
+TS:  16, skip: 1, model: LSTM , sensor: HR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.52707819, f1: 0.52589096, precision: 0.53317482, recall: 0.53399462 
+TS:  16, skip: 1, model: BiLSTM, sensor: HR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.55829904, f1: 0.49854984, precision: 0.51930975, recall: 0.51449824 
+TS:  16, skip: 1, model: TCN  , sensor: RR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.56235940, f1: 0.56226685, precision: 0.58253760, recall: 0.58162570 
+TS:  16, skip: 1, model: LSTM , sensor: RR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.51670782, f1: 0.47111504, precision: 0.68990829, recall: 0.58344906 
+TS:  16, skip: 1, model: BiLSTM, sensor: RR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.59094650, f1: 0.52291866, precision: 0.56269339, recall: 0.54244209 
+TS:  16, skip: 1, model: TCN  , sensor: GSR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.55956104, f1: 0.50432245, precision: 0.52295934, recall: 0.51778524 
+TS:  16, skip: 1, model: LSTM , sensor: GSR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.56795610, f1: 0.53504192, precision: 0.54279619, recall: 0.53828759 
+TS:  16, skip: 1, model: BiLSTM, sensor: GSR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57157750, f1: 0.55129267, precision: 0.55336338, recall: 0.55136837 
+TS:  16, skip: 1, model: TCN  , sensor: Temp_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.52866941, f1: 0.51699845, precision: 0.51703103, recall: 0.51718899 
+TS:  16, skip: 1, model: LSTM , sensor: Temp_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.58496571, f1: 0.36907152, precision: 0.29248285, recall: 0.50000000 
+TS:  16, skip: 1, model: BiLSTM, sensor: Temp_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.58496571, f1: 0.36907152, precision: 0.29248285, recall: 0.50000000 
+TS:  32, skip: 1, model: TCN  , sensor: All_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.53527802, f1: 0.53418102, precision: 0.54624368, recall: 0.54767117 
+TS:  32, skip: 1, model: LSTM , sensor: All_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.59655564, f1: 0.37365164, precision: 0.29947725, recall: 0.49666556 
+TS:  32, skip: 1, model: BiLSTM, sensor: All_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57506174, f1: 0.47580128, precision: 0.51406823, recall: 0.50809591 
+TS:  32, skip: 1, model: TCN  , sensor: HR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57359322, f1: 0.54031134, precision: 0.54478901, recall: 0.54137517 
+TS:  32, skip: 1, model: LSTM , sensor: HR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.58640945, f1: 0.41656243, precision: 0.49179276, recall: 0.49804000 
+TS:  32, skip: 1, model: BiLSTM, sensor: HR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.60176223, f1: 0.37911982, precision: 0.72374560, recall: 0.50161594 
+TS:  32, skip: 1, model: TCN  , sensor: RR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.61698151, f1: 0.59965019, precision: 0.59998231, recall: 0.59938030 
+TS:  32, skip: 1, model: LSTM , sensor: RR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.60650157, f1: 0.43378683, precision: 0.58516507, recall: 0.51630681 
+TS:  32, skip: 1, model: BiLSTM, sensor: RR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.62432414, f1: 0.60813478, precision: 0.60823571, recall: 0.60803982 
+TS:  32, skip: 1, model: TCN  , sensor: GSR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.59915893, f1: 0.53639922, precision: 0.56355965, recall: 0.54729789 
+TS:  32, skip: 1, model: LSTM , sensor: GSR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.55930846, f1: 0.54776958, precision: 0.54808056, recall: 0.54940555 
+TS:  32, skip: 1, model: BiLSTM, sensor: GSR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.58320539, f1: 0.55322077, precision: 0.55706161, recall: 0.55349120 
+TS:  32, skip: 1, model: TCN  , sensor: Temp_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.51198184, f1: 0.49936761, precision: 0.50028574, recall: 0.50029375 
+TS:  32, skip: 1, model: LSTM , sensor: Temp_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.60056071, f1: 0.37521895, precision: 0.30028036, recall: 0.50000000 
+TS:  32, skip: 1, model: BiLSTM, sensor: Temp_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.60056071, f1: 0.37521895, precision: 0.30028036, recall: 0.50000000 
+TS:  64, skip: 1, model: TCN  , sensor: All_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.52560148, f1: 0.50390453, precision: 0.50857127, recall: 0.50934092 
+TS:  64, skip: 1, model: LSTM , sensor: All_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.65206663, f1: 0.40137503, precision: 0.53017167, recall: 0.50080306 
+TS:  64, skip: 1, model: BiLSTM, sensor: All_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.63777504, f1: 0.42765899, precision: 0.49483267, recall: 0.49897217 
+TS:  64, skip: 1, model: TCN  , sensor: HR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.62625951, f1: 0.50717268, precision: 0.54166667, recall: 0.52492395 
+TS:  64, skip: 1, model: LSTM , sensor: HR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.65319761, f1: 0.39511164, precision: 0.32659881, recall: 0.50000000 
+TS:  64, skip: 1, model: BiLSTM, sensor: HR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.50246761, f1: 0.47835673, precision: 0.48327910, recall: 0.48182860 
+TS:  64, skip: 1, model: TCN  , sensor: RR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.58924532, f1: 0.57647294, precision: 0.58311547, recall: 0.59157298 
+TS:  64, skip: 1, model: LSTM , sensor: RR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.65319761, f1: 0.39511164, precision: 0.32659881, recall: 0.50000000 
+TS:  64, skip: 1, model: BiLSTM, sensor: RR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.52920008, f1: 0.48110657, precision: 0.48113333, recall: 0.48108380 
+TS:  64, skip: 1, model: TCN  , sensor: GSR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.60045240, f1: 0.53420213, precision: 0.53982873, recall: 0.53513823 
+TS:  64, skip: 1, model: LSTM , sensor: GSR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.65144972, f1: 0.39447142, precision: 0.32629519, recall: 0.49866205 
+TS:  64, skip: 1, model: BiLSTM, sensor: GSR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.56703681, f1: 0.47330324, precision: 0.47851810, recall: 0.48313722 
+TS:  64, skip: 1, model: TCN  , sensor: Temp_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.59469463, f1: 0.53826872, precision: 0.54082171, recall: 0.53810136 
+TS:  64, skip: 1, model: LSTM , sensor: Temp_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.65319761, f1: 0.39511164, precision: 0.32659881, recall: 0.50000000 
+TS:  64, skip: 1, model: BiLSTM, sensor: Temp_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.65319761, f1: 0.39511164, precision: 0.32659881, recall: 0.50000000 
+TS:   8, skip: 1, model: TCN+LSTM, sensor: All_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.52152893, f1: 0.51953249, precision: 0.54804529, recall: 0.54522461 
+TS:   8, skip: 1, model: TCN+LSTM, sensor: HR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57878834, f1: 0.36660287, precision: 0.28939417, recall: 0.50000000 
+TS:   8, skip: 1, model: TCN+LSTM, sensor: RR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57878834, f1: 0.36660287, precision: 0.28939417, recall: 0.50000000 
+TS:   8, skip: 1, model: TCN+LSTM, sensor: GSR_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57873798, f1: 0.38657161, precision: 0.53948823, recall: 0.50303252 
+TS:   8, skip: 1, model: TCN+LSTM, sensor: Temp_frame8_skip1, classes: 2, BatchSize: 256, Accuracy: 0.55401118, f1: 0.52572964, precision: 0.53138110, recall: 0.52865839 
+TS:  16, skip: 1, model: TCN+LSTM, sensor: All_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.57969822, f1: 0.44402477, precision: 0.53081054, recall: 0.51049490 
+TS:  16, skip: 1, model: TCN+LSTM, sensor: HR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.58496571, f1: 0.36907152, precision: 0.29248285, recall: 0.50000000 
+TS:  16, skip: 1, model: TCN+LSTM, sensor: RR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.58496571, f1: 0.36907152, precision: 0.29248285, recall: 0.50000000 
+TS:  16, skip: 1, model: TCN+LSTM, sensor: GSR_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.56609053, f1: 0.49227692, precision: 0.52425490, recall: 0.51620373 
+TS:  16, skip: 1, model: TCN+LSTM, sensor: Temp_frame16_skip1, classes: 2, BatchSize: 256, Accuracy: 0.56186557, f1: 0.52257964, precision: 0.53292596, recall: 0.52837704 
+TS:  32, skip: 1, model: TCN+LSTM, sensor: All_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.58981376, f1: 0.51481454, precision: 0.54709254, recall: 0.53227016 
+TS:  32, skip: 1, model: TCN+LSTM, sensor: HR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.60056071, f1: 0.37521895, precision: 0.30028036, recall: 0.50000000 
+TS:  32, skip: 1, model: TCN+LSTM, sensor: RR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.60056071, f1: 0.37521895, precision: 0.30028036, recall: 0.50000000 
+TS:  32, skip: 1, model: TCN+LSTM, sensor: GSR_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.58093585, f1: 0.49176811, precision: 0.52844685, recall: 0.51763145 
+TS:  32, skip: 1, model: TCN+LSTM, sensor: Temp_frame32_skip1, classes: 2, BatchSize: 256, Accuracy: 0.55236633, f1: 0.52163669, precision: 0.52384587, recall: 0.52252737 
+TS:  64, skip: 1, model: TCN+LSTM, sensor: All_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.55603537, f1: 0.52304314, precision: 0.52352515, recall: 0.52471024 
+TS:  64, skip: 1, model: TCN+LSTM, sensor: HR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.64990746, f1: 0.39558193, precision: 0.39430245, recall: 0.49789870 
+TS:  64, skip: 1, model: TCN+LSTM, sensor: RR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.65319761, f1: 0.39511164, precision: 0.32659881, recall: 0.50000000 
+TS:  64, skip: 1, model: TCN+LSTM, sensor: GSR_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.65319761, f1: 0.39511164, precision: 0.32659881, recall: 0.50000000 
+TS:  64, skip: 1, model: TCN+LSTM, sensor: Temp_frame64_skip1, classes: 2, BatchSize: 256, Accuracy: 0.63530742, f1: 0.54613918, precision: 0.56999095, recall: 0.55124952 

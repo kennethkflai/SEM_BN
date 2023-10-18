@@ -7,7 +7,7 @@ from sklearn.metrics import classification_report
 
 save_root = "save"
 
-models = {0:"TCN", 1:"LSTM", 2:"BiLSTM"}
+models = {0:"TCN", 1:"LSTM", 2:"BiLSTM", 3:"TCN+LSTM"}
 categories = {-1:"All", 0:"HR", 1:"RR", 2:"GSR", 3:"Temp"}
 
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     num_frame = _args.timestep
     root_path =  r"data//*//*"
 
-    for fr in range(3,11):
+    for fr in range(3,7):
         num_frame = 2**fr
         skip = 1#max(np.int(1), np.int(num_frame//2))
         
@@ -67,6 +67,9 @@ if __name__ == "__main__":
             
         train_label = [resting[lbl] for lbl in train_label]
         test_label = [resting[lbl] for lbl in test_label]
+    
+#        train_label = [classes[lbl] for lbl in train_label]
+#        test_label = [classes[lbl] for lbl in test_label]
         
         for sensor in range(-1, 4):
             if sensor==-1:
@@ -79,12 +82,12 @@ if __name__ == "__main__":
                 train_data = np.array(train_data_total)[:,:,sensor]
                 train_data = train_data[:,:,np.newaxis]
             
-            for model_type in range(0,3):
+            for model_type in range(0,4):
                 model_name =f"{categories[sensor]}_frame{num_frame}_skip{skip}"
     
                 t_model = model(num_classes=len(np.unique(train_label)),
                                 model_type=(models[model_type],model_name),
-                                lr=1e-3,
+                                lr=1e-4,
                                 num_frame=num_frame,
                                 feature_size=(train_data.shape[2],))
     
@@ -98,12 +101,15 @@ if __name__ == "__main__":
     
                 t_model.load(save_file)
                 pred_test_label = t_model.predict(np.array(test_data))
-                prediction = np.argmax(pred_test_label,1)
-    # t_model.predict(np.ones((1,11,1)))
+                
+                if model_type == 3:
+                    prediction = np.argmax(pred_test_label[-1],1)
+                else:
+                    prediction = np.argmax(pred_test_label,1)
+                    
                 np.save(f'{save_root}//{models[model_type]}//{model_name}_predict_test', prediction)
                 np.save(f'{save_root}//{models[model_type]}//{model_name}_truth_test', test_label)
-            
-            
+                
                 report = classification_report(test_label, prediction,output_dict=True)
                 f = open(f'{save_root}//acc.txt', 'a')
                             

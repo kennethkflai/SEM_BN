@@ -10,10 +10,14 @@ from keras.optimizers import Adam, Adadelta
 import numpy as np
 import os
 
-classifier_activation = "softmax"
+#classifier_activation = "softmax"
+classifier_activation = "sigmoid"
 classifier_loss = "categorical_crossentropy"
 
 def custom_loss(layer, lay2, T):
+    '''
+    Custom loss for knowledge distillation
+    '''
     def loss(y_true,y_pred):
         from keras.losses import categorical_crossentropy as logloss
         from keras.losses import kullback_leibler_divergence as kld
@@ -140,15 +144,16 @@ class model(object):
             self.create_model_1(num_frame, num_classes, feature_size)
         elif model_type[0] == "BiLSTM": #BiLSTM
             self.create_model_2(num_frame, num_classes, feature_size)
-        elif model_type[0] == "GridLSTM": #BiLSTM
-            self.create_model_2(num_frame, num_classes, feature_size)
-        elif model_type[0] == "BGLSTM": #BiLSTM
-            self.create_model_2(num_frame, num_classes, feature_size)
-
-#        elif model_type[0] == 2: #TCN + LSTM
+        elif model_type[0] == "TCN+LSTM": #LSTM
+            self.create_model_3(num_frame, num_classes, feature_size)
+#        elif model_type[0] == "BGLSTM": #BiLSTM
 #            self.create_model_2(num_frame, num_classes, feature_size)
 
+
     def create_model_0(self, num_frame, num_classes, feature_size,activation_custom="relu"):
+        '''
+        TCN Model
+        '''
         main_input = Input(shape=(num_frame, feature_size[0]))
         t = Reshape((num_frame, feature_size[0]))(main_input)
 
@@ -157,7 +162,7 @@ class model(object):
         t = BatchNormalization(axis=-1)(t4)
         t = GlobalAveragePooling1D()(t)
 
-        t = MLP(256, t)
+#        t = MLP(256, t)
         tout = Dense(num_classes,activation=classifier_activation)(t)
 
         self.model = Model(inputs=main_input, output=[tout])
@@ -167,10 +172,13 @@ class model(object):
 
 
     def create_model_1(self, num_frame, num_classes, feature_size,activation_custom="relu"):
+        '''
+        LSTM Model
+        '''
         main_input = Input(shape=(num_frame, feature_size[0]))
         t = lstm_block((num_frame, feature_size[0]), (128,128) , main_input)
         t = BatchNormalization(axis=-1)(t)
-        t = MLP(256, t)
+#        t = MLP(256, t)
         tout = Dense(num_classes,activation=classifier_activation)(t)
 
         self.model = Model(inputs=main_input, output=[tout])
@@ -180,43 +188,49 @@ class model(object):
 
 
     def create_model_2(self, num_frame, num_classes, feature_size,activation_custom="relu"):
+        '''
+        BiLSTM Model
+        '''
         main_input = Input(shape=(num_frame, feature_size[0]))
         t = bilstm_block((num_frame, feature_size[0]), (128,128) , main_input)
         t = BatchNormalization(axis=-1)(t)
-        t = MLP(256, t)
+#        t = MLP(256, t)
         tout = Dense(num_classes,activation=classifier_activation)(t)
 
         self.model = Model(inputs=main_input, output=[tout])
         self.model.summary()
 
         self.model.compile(loss=classifier_loss, optimizer=self.optimizer, metrics=["accuracy"])
-#
-#    def create_model_2(self, num_frame, num_classes, feature_size,activation_custom="relu"):
-#        main_input = Input(shape=(num_frame, feature_size[0]))
-#        t_lstm_feature = cudnnlstm_block((num_frame, feature_size[0]), (60,30), main_input)
-#        t_lstm_logit = Dense(num_classes)(t_lstm_feature)
-##        t_lstm_out = Activation('softmax', name='t1')(t_lstm_logit)
-#
-#        t = Reshape((num_frame, feature_size[0]))(main_input)
-#        vals = [8, 16, 32, 64]
-#        t1, t2, t3, t4 = TCN_Block(t, activation_custom, vals, jump=True, length=6)
-#        t = BatchNormalization(axis=-1)(t4)
-#        t = Activation(activation_custom)(t)
-#        t_tcn_feature = GlobalAveragePooling1D()(t)
-#        t_tcn_logit = Dense(num_classes)(t_tcn_feature)
-##        t_tcn_out = Activation('softmax', name='t2')(t_tcn_logit)
-#
-#        logit = concatenate([t_lstm_feature, t_tcn_feature])
-#        logit = Dense(num_classes)(logit)
-#        tout = Activation('softmax', name='out')(logit)
-#
-#        self.model = Model(inputs=main_input, output=[tout, t_lstm_out, t_tcn_out])
-#        self.model.summary()
-#        losses = {"out": 'mse',
-#          "t1": custom_loss(logit, t_lstm_logit, 1),
-#          "t2": custom_loss(logit, t_tcn_logit, 1)
-#          }
-#        self.model.compile(loss=losses, optimizer=self.optimizer, metrics=['mae'])
+
+    def create_model_3(self, num_frame, num_classes, feature_size,activation_custom="relu"):
+        '''
+        TCN+LSTM Model
+        '''
+        main_input = Input(shape=(num_frame, feature_size[0]))
+        t_lstm_feature = cudnnlstm_block((num_frame, feature_size[0]), (128,128), main_input)
+        t_lstm_logit = Dense(num_classes)(t_lstm_feature)
+        t_lstm_out = Activation('softmax', name='t1')(t_lstm_logit)
+
+        t = Reshape((num_frame, feature_size[0]))(main_input)
+        vals = [8, 16, 32, 64]
+        t1, t2, t3, t4 = TCN_Block(t, activation_custom, vals, jump=True, length=6)
+        t = BatchNormalization(axis=-1)(t4)
+        t = Activation(activation_custom)(t)
+        t_tcn_feature = GlobalAveragePooling1D()(t)
+        t_tcn_logit = Dense(num_classes)(t_tcn_feature)
+        t_tcn_out = Activation('softmax', name='t2')(t_tcn_logit)
+
+        logit = concatenate([t_lstm_feature, t_tcn_feature])
+        logit = Dense(num_classes)(logit)
+        tout = Activation('softmax', name='out')(logit)
+
+        self.model = Model(inputs=main_input, output=[tout, t_lstm_out, t_tcn_out])
+        self.model.summary()
+        losses = {"out": 'categorical_crossentropy',
+          "t1": custom_loss(logit, t_lstm_logit, 1),
+          "t2": custom_loss(logit, t_tcn_logit, 1)
+          }
+        self.model.compile(loss=losses, optimizer=self.optimizer, metrics=['accuracy'])
 
 
     def train(self,
@@ -237,15 +251,23 @@ class model(object):
         val_label =  to_categorical(val_label, num_classes=None)
     
         filepath = f'{path}//{self.model_type[0]}//{self.model_type[1]}.hdf5'
-        checkpoint = ModelCheckpoint(filepath, monitor='val_loss',
+        checkpoint = ModelCheckpoint(filepath, monitor='val_acc',
                                      verbose=0, save_best_only=True, save_weights_only=True,
-                                     mode='min')
+                                     mode='max')
 
-        early=EarlyStopping(monitor='val_loss', patience=100,verbose=0,mode='auto')
+        checkpoint2 = ModelCheckpoint(filepath, monitor='val_out_acc',
+                                     verbose=0, save_best_only=True, save_weights_only=True,
+                                     mode='max')
+        
+        early=EarlyStopping(monitor='loss', patience=100,verbose=0,mode='auto')
 
 
-        callbacks_list = [checkpoint, early]
+        callbacks_list = [checkpoint, checkpoint2, early]
 
+        if self.model_type[0]== "TCN+LSTM":
+            train_label = [train_label, train_label, train_label]
+            val_label = [val_label, val_label, val_label]
+            
         self.model.fit(train_data, train_label, batch_size=bs,
                        epochs=base_epoch, shuffle=True,
                        validation_data=(val_data, val_label),class_weight=cw,
