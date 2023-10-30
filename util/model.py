@@ -146,6 +146,8 @@ class model(object):
             self.create_model_2(num_frame, num_classes, feature_size)
         elif model_type[0] == "TCN+LSTM": #LSTM
             self.create_model_3(num_frame, num_classes, feature_size)
+        elif model_type[0] == "TCN+BiLSTM": #LSTM
+            self.create_model_4(num_frame, num_classes, feature_size)
 #        elif model_type[0] == "BGLSTM": #BiLSTM
 #            self.create_model_2(num_frame, num_classes, feature_size)
 
@@ -232,7 +234,36 @@ class model(object):
           }
         self.model.compile(loss=losses, optimizer=self.optimizer, metrics=['accuracy'])
 
+    def create_model_4(self, num_frame, num_classes, feature_size,activation_custom="relu"):
+        '''
+        TCN+LSTM Model
+        '''
+        main_input = Input(shape=(num_frame, feature_size[0]))
+        t_lstm_feature = bilstm_block((num_frame, feature_size[0]), (256,256), main_input)
+        t_lstm_logit = Dense(num_classes)(t_lstm_feature)
+        t_lstm_out = Activation('softmax', name='t1')(t_lstm_logit)
 
+        t = Reshape((num_frame, feature_size[0]))(main_input)
+        vals = [8, 16, 32, 64]
+        t1, t2, t3, t4 = TCN_Block(t, activation_custom, vals, jump=True, length=6)
+        t = BatchNormalization(axis=-1)(t4)
+        t = Activation(activation_custom)(t)
+        t_tcn_feature = GlobalAveragePooling1D()(t)
+        t_tcn_logit = Dense(num_classes)(t_tcn_feature)
+        t_tcn_out = Activation('softmax', name='t2')(t_tcn_logit)
+
+        logit = concatenate([t_lstm_feature, t_tcn_feature])
+        logit = Dense(num_classes)(logit)
+        tout = Activation('softmax', name='out')(logit)
+
+        self.model = Model(inputs=main_input, output=[tout, t_lstm_out, t_tcn_out])
+        self.model.summary()
+        losses = {"out": 'categorical_crossentropy',
+          "t1": custom_loss(logit, t_lstm_logit, 1),
+          "t2": custom_loss(logit, t_tcn_logit, 1)
+          }
+        self.model.compile(loss=losses, optimizer=self.optimizer, metrics=['accuracy'])
+        
     def train(self,
               train_data, train_label,
               val_data=[], val_label=[],
@@ -264,7 +295,7 @@ class model(object):
 
         callbacks_list = [checkpoint, checkpoint2, early]
 
-        if self.model_type[0]== "TCN+LSTM":
+        if self.model_type[0]== "TCN+LSTM" or self.model_type[0]== "TCN+BiLSTM":
             train_label = [train_label, train_label, train_label]
             val_label = [val_label, val_label, val_label]
             

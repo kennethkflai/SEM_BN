@@ -7,7 +7,7 @@ from sklearn.metrics import classification_report
 
 save_root = "save"
 
-models = {0:"TCN", 1:"LSTM", 2:"BiLSTM", 3:"TCN+LSTM"}
+models = {0:"TCN", 1:"LSTM", 2:"BiLSTM", 3:"TCN+LSTM", 4:"TCN+BiLSTM"}
 categories = {-1:"All", 0:"HR", 1:"RR", 2:"GSR", 3:"Temp"}
 
 
@@ -33,22 +33,19 @@ if __name__ == "__main__":
     data_structure = Data_Model(root_path, num_frame=num_frame, skip=skip, sensor=-1)
     subject_train_data, subject_train_label, subject_test_data, subject_test_label = data_structure.get_data()
     
-    test_label = []
-    test_data_total = []
-    for i in range(len(subject_test_label)):
-        for j in range(len(subject_test_label[i])):
-            if len(subject_test_data[i][j]) != 0:
-                test_label.append(subject_test_label[i][j])
-                test_data_total.append(subject_test_data[i][j][-1])
-                
-                
-
-    
-    for cv in range(3):
+    for cv in range(0,3):
         train_label = []
         train_data_total = []
         val_label = []
         val_data_total = []
+        test_label = []
+        test_data_total = []
+        for i in range(len(subject_test_label)):
+            for j in range(len(subject_test_label[i])):
+                if len(subject_test_data[i][j]) != 0:
+                    test_label.append(subject_test_label[i][j])
+                    test_data_total.append(subject_test_data[i][j][-1])
+                
         for i in range(len(subject_train_label)):
             for j in range(len(subject_train_label[i])):
                 if len(subject_train_data[i][j]) != 0:
@@ -63,6 +60,7 @@ if __name__ == "__main__":
         resting = {lbl:"est" in lbl for index,lbl in enumerate(np.unique(train_label))}
         train_label = [resting[lbl] for lbl in train_label]
         test_label = [resting[lbl] for lbl in test_label]
+        
         val_label = [resting[lbl] for lbl in val_label]
         
     #    classes = {lbl:index for index,lbl in enumerate(np.unique(train_label))}
@@ -85,7 +83,7 @@ if __name__ == "__main__":
                 val_data = val_data[:,:,np.newaxis]
             
             
-            for model_type in range(1,4):
+            for model_type in range(4,5):
                 model_name =f"{categories[sensor]}_frame{num_frame}_skip{skip}_cv{cv}"
     
                 t_model = model(num_classes=len(np.unique(train_label)),
@@ -106,7 +104,7 @@ if __name__ == "__main__":
                 pred_test_label = t_model.predict(test_data)
                 pred_val_label = t_model.predict(val_data)
                 
-                if model_type == 3:
+                if model_type == 3 or model_type == 4:
                     prediction = np.argmax(pred_test_label[-1],1)
                     validation = np.argmax(pred_val_label[-1],1)
                 else:
